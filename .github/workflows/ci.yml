@@ -8,7 +8,7 @@ jobs:
       - run: |
           sudo apt update && sudo apt install clang clang-tidy python3 python3-pip && sudo pip install cpplint
           cpplint --extensions=c *.c sky_lib/* > cpplint_result.txt
-          clang-tidy sky_lib/* main.c -warnings-as-errors=* -extra-arg=-std=c99 -- -I sky_lib/ > clang_result.txt
+          clang-tidy sky_lib/* main.c -extra-arg=-std=c99 -- -I sky_lib/ > clang_result.txt
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
