@@ -47,5 +47,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: |
-            build/report/
+            build/coverage_report/
             build/valgrind_tests_report.txt
