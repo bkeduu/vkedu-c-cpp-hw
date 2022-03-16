@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdio.h>
+
 #include "errors.h"
 
 short start(FILE*);

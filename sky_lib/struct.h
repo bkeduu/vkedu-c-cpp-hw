@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdio.h>
+
 #include "errors.h"
 
 typedef struct skyscraper {  // description of skyscraper structure

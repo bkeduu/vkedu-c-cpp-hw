@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -187,7 +186,7 @@ void list(const skyscraper* arr, const int size, char** countries, const int cco
 	// not optimal algorithm
 	// algorithm iterating on countries array, and then choosing all objects with this country
 
-	int i = 0, j = 0;
+	int i, j;
 
 	if (!size) {
 		printf("\nNothing to be listed.\n");
@@ -196,7 +195,7 @@ void list(const skyscraper* arr, const int size, char** countries, const int cco
 
 	printf("\nListing skyscrapers by country:\n");
 
-	for (i; i < ccount; ++i) {
+	for (i = 0; i < ccount; ++i) {
 		printf("\nCountry: %s\n\n", countries[i]);
 
 		for (j = 0; j < size; ++j) {
@@ -211,11 +210,9 @@ void list(const skyscraper* arr, const int size, char** countries, const int cco
 		}
 	}
 
-	i = j = 0;
-
 	printf("\nListing skyscrapers by purpose:\n");
 
-	for (i; i < pcount; ++i) {
+	for (i = 0; i < pcount; ++i) {
 		printf("\nPurpose: %s\n\n", purposes[i]);
 
 		for (j = 0; j < size; ++j) {

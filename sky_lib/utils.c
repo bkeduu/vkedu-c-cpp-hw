@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -76,7 +75,7 @@ short start(FILE* in) {  // function with main logic
 			break;
 		}
 
-		free(mode_str);
+		free(mode->ptr);
 		free(mode);
 
 		printf("\nChoose option:\n");
@@ -84,7 +83,8 @@ short start(FILE* in) {  // function with main logic
 		printf("2. List skyscrapers;\n");
 	}
 
-	free(mode_str);  // deleting all heap variables
+	if ((char*)mode->ptr != NULL)
+		free((char*)mode->ptr);  // deleting all heap variables
 	free(mode);
 
 	int i = 0;
@@ -136,7 +136,7 @@ result* add_str(const char* str, char** arr, int* size) {
 	++(*size);
 
 	arr[(*size) - 1] = check_str;
-	snprintf(arr[(*size) - 1], strlen(str) + 1, str);
+	snprintf(arr[(*size) - 1], strlen(str) + 1, "%s", str);
 
 	return get_result(0, arr);
 }
@@ -224,5 +224,7 @@ int to_int(const char* str) {  // function that converts str to integer value
 		}
 	}
 
-	return out /= 10;  // divide by 10 because of last cycle iteration
+	out /= 10;  // divide by 10 because of last cycle iteration
+
+	return out;
 }
