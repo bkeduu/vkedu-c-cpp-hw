@@ -14,7 +14,7 @@ int main(void) {
 			printf("\nSkyscraper\'s characteristics should be positive numbers, exiting...\n");
 			break;
 		case ERR_EOF:
-			printf("\nEOF received, exiting...\n");
+			printf("EOF received, exiting...\n");
 			break;
 		default:
 			break;

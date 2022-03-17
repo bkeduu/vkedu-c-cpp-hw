@@ -14,5 +14,4 @@ typedef struct skyscraper {  // description of skyscraper structure
 } skyscraper;
 
 result_t* add(skyscraper*, int*, FILE*);
-void list(const skyscraper* arr, const int size, char** countries, const int ccount,
-				char** purposes, const int pcount);
+void list(const skyscraper*, const int, char**, const int, char**, const int);

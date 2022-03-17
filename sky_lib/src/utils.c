@@ -15,25 +15,26 @@ short start(FILE* in) {  // function with main logic
 	skyscraper* objects = NULL;  // ptr for array for storing skyscrapers
 	int objects_count = 0;
 
-	result_t* mode = NULL;  // var for menu mode choosing
+	char* mode = NULL;  // var for menu mode choosing
+	size_t mode_size = 0;
 	short error_code = 0;
-	char* mode_str = NULL;  // menu mode in str type
 
 	printf("Welcome to the program!\n");
 	printf("Choose option from menu or any another character to exit: \n");
 	printf("1. Add skyscraper;\n");
 	printf("2. List skyscrapers;\n");
 
-	while ((mode = get_line(in))) {
-		mode_str = (char*)mode->ptr;
-
-		if (mode->code == ERR_MALLOC || mode->code == ERR_EOF) {  // checking for errors in mode choosing
-			error_code = mode->code;
+	while (getline(&mode, &mode_size, in)) {
+		if (feof(in)) {
+			error_code = ERR_EOF;
 			break;
-		} else if (strlen((char*)mode_str) > 1) {  // if entered more than 1 character return ERR_BAD_INPUT
+		} else if (strlen(mode) == 0) {
+			error_code = ERR_MALLOC;
+			break;
+		} else if (strlen(mode) > 2) {  // if entered more than 1 character return ERR_BAD_INPUT
 			error_code = ERR_BAD_INPUT;
 			break;
-		} else if (mode_str[0] == '1') {  // adding mode
+		} else if (mode[0] == '1') {  // adding mode
 			result_t* temp = add(objects, &objects_count, in);  // temp var for checking errors
 			objects = (skyscraper*)temp->ptr;
 
@@ -68,23 +69,21 @@ short start(FILE* in) {  // function with main logic
 			}
 
 			free(temp);
-		} else if (mode_str[0] == '2') {  // list mode
+		} else if (mode[0] == '2') {  // list mode
 			list(objects, objects_count, countries, countries_count, purposes, purposes_count);
 		} else {  // another character received
 			error_code = ERR_BAD_INPUT;
 			break;
 		}
 
-		free(mode->ptr);
 		free(mode);
+		mode_size = 0;
 
 		printf("\nChoose option:\n");
 		printf("1. Add skyscraper;\n");
 		printf("2. List skyscrapers;\n");
 	}
 
-	if ((char*)mode->ptr != NULL)
-		free((char*)mode->ptr);  // deleting all heap variables
 	free(mode);
 
 	int i = 0;
@@ -143,7 +142,6 @@ result_t* add_str(const char* str, char** arr, int* size) {
 
 short contains(const char* const str, char** arr, const int size) {
 			// function that checks availibility of str in arr
-
 	if (size) {
 		int i;
 
@@ -156,55 +154,3 @@ short contains(const char* const str, char** arr, const int size) {
 	return 0;
 }
 
-result_t* get_line(FILE* in) {  // function that input str from in
-	char* result_str = NULL;
-	char* check = NULL;
-
-	result_str = (char*)malloc(sizeof(char));
-
-	if (!result_str)
-		return get_result(ERR_MALLOC, NULL);
-
-	int size = 1;  // real strlen
-	int buff_size = 1;  // size of allocated buffer
-
-	char input = '\0';
-
-	while ((input = getc(in))) {
-		if (input != '\n' && input != EOF) {
-			result_str[size++ - 1] = input;
-
-			if (size >= buff_size) {  // if count of scanned characters grater than buffer size
-				buff_size *= 2;  // multiply buffer size
-				check = (char*)realloc(result_str, sizeof(char) * buff_size);  // and realloc memory
-
-				if (!check) {
-					free(result_str);
-					return get_result(ERR_MALLOC, NULL);
-				}
-
-				result_str = check;
-			}
-		} else if (input == EOF) {  // if EOF (Ctrl+D) received, delete str from heap and return ERR_EOF
-			result_str[size - 1] = '\0';
-			free(result_str);
-
-			return get_result(ERR_EOF, NULL);
-		} else {  // if newline character recieved, exit from cycle
-			break;
-		}
-	}
-
-	check = (char*)realloc(result_str, sizeof(char) * (size + 1));  // allocate memory for '\0'-symbol
-
-	if (!check) {
-		free(result_str);
-		return get_result(ERR_MALLOC, NULL);
-	}
-
-	result_str = check;
-
-	result_str[size - 1] = '\0';
-
-	return get_result(0, result_str);
-}
