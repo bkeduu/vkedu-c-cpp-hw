@@ -27,6 +27,10 @@ result_t* add(skyscraper* arr, int* size, FILE* in) {  // function that scan par
 
 	temp = (skyscraper*)malloc(sizeof(skyscraper));
 
+	temp->name = NULL;
+	temp->country = NULL;
+	temp->purpose = NULL;
+
 	printf("Enter parameters of new skyscraper:\n");
 
 	printf("Enter skyscraper\'s name: ");
@@ -35,10 +39,14 @@ result_t* add(skyscraper* arr, int* size, FILE* in) {  // function that scan par
 	if (!input_size)
 		code = ERR_MALLOC;
 
-	input[strlen(input) - 1] = '\0';
-	temp->name = input;  // if error not given, store information in temp object
-	input = NULL;
-	input_size = 0;
+	if (feof(in)) {
+		code = ERR_EOF;
+	} else {
+		input[strlen(input) - 1] = '\0';
+		temp->name = input;  // if error not given, store information in temp object
+		input = NULL;
+		input_size = 0;
+	}
 
 	printf("Enter skyscraper\'s country: ");
 	getline(&input, &input_size, in);  // scan next line
@@ -46,10 +54,14 @@ result_t* add(skyscraper* arr, int* size, FILE* in) {  // function that scan par
 	if (!input_size)
 		code = ERR_MALLOC;
 
-	input[strlen(input) - 1] = '\0';
-	temp->country = input;
-	input = NULL;
-	input_size = 0;
+	if (feof(in)) {
+		code = ERR_EOF;
+	} else {
+		input[strlen(input) - 1] = '\0';
+		temp->country = input;
+		input = NULL;
+		input_size = 0;
+	}
 
 	printf("Enter skyscraper\'s purpose: ");
 	getline(&input, &input_size, in);
@@ -57,10 +69,14 @@ result_t* add(skyscraper* arr, int* size, FILE* in) {  // function that scan par
 	if (!input_size)
 		code = ERR_MALLOC;
 
-	input[strlen(input) - 1] = '\0';
-	temp->purpose = input;
-	input = NULL;
-	input_size = 0;
+	if (feof(in)) {
+		code = ERR_EOF;
+	} else {
+		input[strlen(input) - 1] = '\0';
+		temp->purpose = input;
+		input = NULL;
+		input_size = 0;
+	}
 
 	printf("Enter skyscraper\'s height: ");
 	getline(&input, &input_size, in);
@@ -68,16 +84,20 @@ result_t* add(skyscraper* arr, int* size, FILE* in) {  // function that scan par
 	if (!input_size)
 		code = ERR_MALLOC;
 
-	input[strlen(input) - 1] = '\0';
-	int height = atoi(input);
-	free(input);
-	input = NULL;
-	input_size = 0;
+	if (feof(in)) {
+		code = ERR_EOF;
+	} else {
+		input[strlen(input) - 1] = '\0';
+		int height = atoi(input);
+		free(input);
+		input = NULL;
+		input_size = 0;
 
-	if (height < 0)
-		code = ERR_NEG_NUM;
+		if (height < 0)
+			code = ERR_NEG_NUM;
 
-	temp->height = height;
+		temp->height = height;
+	}
 
 	printf("Enter skyscraper\'s spire height: ");
 	getline(&input, &input_size, in);
@@ -85,16 +105,20 @@ result_t* add(skyscraper* arr, int* size, FILE* in) {  // function that scan par
 	if (!input_size)
 		code = ERR_MALLOC;
 
-	input[strlen(input) - 1] = '\0';
-	int s_height = atoi(input);
-	free(input);
-	input = NULL;
-	input_size = 0;
+	if (feof(in)) {
+		code = ERR_EOF;
+	} else {
+		input[strlen(input) - 1] = '\0';
+		int s_height = atoi(input);
+		free(input);
+		input = NULL;
+		input_size = 0;
 
-	if (s_height < 0)
-		code = ERR_NEG_NUM;
+		if (s_height < 0)
+			code = ERR_NEG_NUM;
 
-	temp->spire_height = s_height;
+		temp->spire_height = s_height;
+	}
 
 	printf("Enter skyscraper\'s floors count: ");
 	getline(&input, &input_size, in);
@@ -102,23 +126,27 @@ result_t* add(skyscraper* arr, int* size, FILE* in) {  // function that scan par
 	if (!input_size)
 		code = ERR_MALLOC;
 
-	input[strlen(input) - 1] = '\0';
-	int f_count = atoi(input);
-	free(input);
-	input = NULL;
-	input_size = 0;
+	if (feof(in)) {
+		code = ERR_EOF;
+	} else {
+		input[strlen(input) - 1] = '\0';
+		int f_count = atoi(input);
+		free(input);
+		input = NULL;
+		input_size = 0;
 
-	if (f_count < 0)
-		code = ERR_NEG_NUM;
+		if (f_count < 0)
+			code = ERR_NEG_NUM;
 
-	temp->floors_count = f_count;
+		temp->floors_count = f_count;
+	}
 
-	if (code) {
-
+	if (code) {  // if error code received, free all heap vars and exit
 		free(temp->name);
 		free(temp->country);
 		free(temp->purpose);
 		free(temp);
+		free(input);
 
 		return get_result(code, arr);
 	}

@@ -16,7 +16,7 @@ short start(FILE* in) {  // function with main logic
 	int objects_count = 0;
 
 	char* mode = NULL;  // var for menu mode choosing
-	size_t mode_size = 0;
+	size_t mode_size = 0;  // size of allocated memory to mode
 	short error_code = 0;
 
 	printf("Welcome to the program!\n");
@@ -25,10 +25,10 @@ short start(FILE* in) {  // function with main logic
 	printf("2. List skyscrapers;\n");
 
 	while (getline(&mode, &mode_size, in)) {
-		if (feof(in)) {
+		if (feof(in)) {  // if EOF received
 			error_code = ERR_EOF;
 			break;
-		} else if (strlen(mode) == 0) {
+		} else if (mode_size == 0) {  // if mode_size is empty, then malloc error
 			error_code = ERR_MALLOC;
 			break;
 		} else if (strlen(mode) > 2) {  // if entered more than 1 character return ERR_BAD_INPUT
