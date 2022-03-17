@@ -30,7 +30,6 @@ jobs:
           git clone https://github.com/google/googletest.git
           cd googletest && mkdir build && cd build && cmake .. && cmake --build . && sudo cmake --install . && cd ../..
       - name: Build
-        uses: actions/checkout@v2
         run: |
           mkdir build && cd build
           cmake .. && cmake --build .
@@ -40,7 +39,6 @@ jobs:
           path: |
             build/skyscrapers
       - name: Run tests
-        uses: actions/checkout@v2
         run: |
           sudo apt update && sudo apt install valgrind lcov
           valgrind --leak-check=full -s --log-file=valgrind_tests_report.txt ./tests/sky_test
