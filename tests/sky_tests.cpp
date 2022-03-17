@@ -37,26 +37,108 @@ TEST(test_start_string, start_tests) {
 	fclose(stream);
 }
 
-TEST(test_add, add_tests) {
-	const char* add_test = "Federation Tower\nRussia\nOffices\n462\n0\n95\n";
+TEST(test_start_add, start_tests) {
+	const char* add_test = "1\nFederation Tower\nRussia\nOffices\n462\n0\n95\n1\nFederation Tower\nRussia\nOffices\n462\n0\n95\n";
+	FILE* stream = fmemopen((void*)add_test, strlen(add_test), "r");
+	EXPECT_EQ(ERR_EOF, start(stream));
+	fclose(stream);
+}
+
+TEST(test_start_list, start_tests) {
+	const char* add_test = "2\n";
+	FILE* stream = fmemopen((void*)add_test, strlen(add_test), "r");
+	EXPECT_EQ(ERR_EOF, start(stream));
+	fclose(stream);
+}
+
+TEST(test_add_1, add_tests) {
+	const char* add_test = "Federation Tower";
 	skyscraper* arr = NULL;
 	int size = 0;
 	FILE* stream = fmemopen((void*)add_test, strlen(add_test), "r");
 	result_t* res = add(arr, &size, stream);
-	arr = (skyscraper*)res->ptr;
 
-	EXPECT_STREQ(arr[0].name, "Federation Tower");
-	EXPECT_STREQ(arr[0].country, "Russia");
-	EXPECT_STREQ(arr[0].purpose, "Offices");
-	EXPECT_EQ(arr[0].height, 462);
-	EXPECT_EQ(arr[0].spire_height, 0);
-	EXPECT_EQ(arr[0].floors_count, 95);
+	EXPECT_EQ(ERR_EOF, res->code);
 
-	free(arr[0].name);
-	free(arr[0].country);
-	free(arr[0].purpose);
-	free(arr);
+	free(res->ptr);
 	free(res);
+	fclose(stream);
+}
+
+TEST(test_add_2, add_tests) {
+	const char* add_test = "Federation Tower\nRussia";
+	skyscraper* arr = NULL;
+	int size = 0;
+	FILE* stream = fmemopen((void*)add_test, strlen(add_test), "r");
+	result_t* res = add(arr, &size, stream);
+
+	EXPECT_EQ(ERR_EOF, res->code);
+
+	free(res->ptr);
+	free(res);
+	fclose(stream);
+}
+
+TEST(test_add_3, add_tests) {
+	const char* add_test = "Federation Tower\nRussia\nOffices";
+	skyscraper* arr = NULL;
+	int size = 0;
+	FILE* stream = fmemopen((void*)add_test, strlen(add_test), "r");
+	result_t* res = add(arr, &size, stream);
+
+	EXPECT_EQ(ERR_EOF, res->code);
+
+	free(res->ptr);
+	free(res);
+	fclose(stream);
+}
+
+TEST(test_add_4, add_tests) {
+	const char* add_test = "Federation Tower\nRussia\nOffices\n462";
+	skyscraper* arr = NULL;
+	int size = 0;
+	FILE* stream = fmemopen((void*)add_test, strlen(add_test), "r");
+	result_t* res = add(arr, &size, stream);
+
+	EXPECT_EQ(ERR_EOF, res->code);
+
+	free(res->ptr);
+	free(res);
+	fclose(stream);
+}
+
+TEST(test_add_5, add_tests) {
+	const char* add_test = "Federation Tower\nRussia\nOffices\n-1\n0";
+	skyscraper* arr = NULL;
+	int size = 0;
+	FILE* stream = fmemopen((void*)add_test, strlen(add_test), "r");
+	result_t* res = add(arr, &size, stream);
+
+	EXPECT_EQ(ERR_EOF, res->code);
+
+	free(res->ptr);
+	free(res);
+	fclose(stream);
+}
+
+TEST(test_add_6, add_tests) {
+	const char* add_test = "Federation Tower\nRussia\nOffices\n462\n-1\n95";
+	skyscraper* arr = NULL;
+	int size = 0;
+	FILE* stream = fmemopen((void*)add_test, strlen(add_test), "r");
+	result_t* res = add(arr, &size, stream);
+
+	EXPECT_EQ(ERR_EOF, res->code);
+
+	free(res->ptr);
+	free(res);
+	fclose(stream);
+}
+
+TEST(test_add_7, add_tests) {
+	const char* add_test = "1\nFederation Tower\nRussia\nOffices\n462\n-1\n95\n";
+	FILE* stream = fmemopen((void*)add_test, strlen(add_test), "r");
+	EXPECT_EQ(ERR_NEG_NUM, start(stream));
 	fclose(stream);
 }
 
