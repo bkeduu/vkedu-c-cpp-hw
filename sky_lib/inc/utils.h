@@ -1,12 +1,11 @@
 #pragma once
 
-#include <stdio.h>
-
-#include "errors.h"
+#include "defaults.h"
 
 short start(FILE*);
 
-result_t* add_str(const char* str, char** arr, int* size);
+short add_str(const string str, string** arr, size_t* size);
 
-result_t* get_line(FILE*);
-short contains(const char* const str, char** arr, const int size);
+short contains(const string str, string* arr, const size_t size);
+void free_arr(string* arr, size_t);
+void free_struct(skyscraper*);
