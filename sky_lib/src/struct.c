@@ -20,27 +20,25 @@ short add(skyscraper** arr, size_t* size, string** countries, size_t* ccount,
 		return ERR_MALLOC;
 	}
 
-	skyscraper* new_obj = (skyscraper*)malloc(sizeof(skyscraper));
-	short code = input_struct(new_obj, in);  // var for storing error code
+	skyscraper new_obj;
+	short code = input_struct(&new_obj, in);  // var for storing error code
 
 	if (code) {
 		return code;
 	}
 
-	short check = add_str(new_obj->country, countries, ccount);
+	short check = add_str(new_obj.country, countries, ccount);
 
 	if (check) {
-		free_struct(new_obj);
-		free(new_obj);
+		free_struct(&new_obj);
 
 		return check;
 	}
 
-	check = add_str(new_obj->purpose, purposes, pcount);
+	check = add_str(new_obj.purpose, purposes, pcount);
 
 	if (check) {
-		free_struct(new_obj);
-		free(new_obj);
+		free_struct(&new_obj);
 
 		return check;
 	}
@@ -48,24 +46,16 @@ short add(skyscraper** arr, size_t* size, string** countries, size_t* ccount,
 	skyscraper* tmp_arr = (skyscraper*)realloc(*arr, sizeof(skyscraper) * (*size + 1));
 
 	if (!tmp_arr) {
-		free_struct(new_obj);
-		free(new_obj);
+		free_struct(&new_obj);
 
 		return ERR_MALLOC;
 	}
 
 	++(*size);  // if no errors, increase arr size
 
-	tmp_arr[(*size) - 1].name = new_obj->name;  // and add information to new object
-	tmp_arr[(*size) - 1].country = new_obj->country;
-	tmp_arr[(*size) - 1].purpose = new_obj->purpose;
-	tmp_arr[(*size) - 1].height = new_obj->height;
-	tmp_arr[(*size) - 1].spire_height = new_obj->spire_height;
-	tmp_arr[(*size) - 1].floors_count = new_obj->floors_count;
+	tmp_arr[(*size) - 1] = new_obj;  // and add information to new object
 
 	*arr = tmp_arr;
-
-	free(new_obj);
 
 	return 0;
 }
@@ -73,6 +63,11 @@ short add(skyscraper** arr, size_t* size, string** countries, size_t* ccount,
 void list(const skyscraper* arr, const size_t size, string* countries, const size_t ccount,
 						string* purposes, const size_t pcount) {
 	// function that lists skyscrapers with groupping by purpose, and then by country
+
+	if (arr == NULL || countries == NULL || purposes == NULL) {
+		return ERR_NULL;
+	}
+
 
 	if (!size) {
 		printf("\nNothing to list.\n");
@@ -240,7 +235,6 @@ short input_struct(skyscraper* res, FILE* in) {  // function with input new stru
 
 	if (code) {  // if error code received, free all heap vars and exit
 		free_struct(res);
-		free(res);
 		free(input);
 
 		return code;

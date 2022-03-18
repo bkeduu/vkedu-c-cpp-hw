@@ -73,6 +73,10 @@ short start(FILE* in) {  // function with main logic
 short add_str(const string str, string** arr, size_t* size) {
 		// function that adds str to arr, if str is not already in arr
 
+	if (str == NULL || arr == NULL || size == NULL) {
+		return ERR_NULL;
+	}
+
 	if (*size == 0)
 		*arr = (string*)malloc(sizeof(string));
 

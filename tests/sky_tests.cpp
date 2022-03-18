@@ -203,19 +203,11 @@ TEST(test_list_filled, list_tests) {
 
 	list(arr, size, countries, ccount, purposes, pcount);
 
-	free(countries[0]);
-	free(purposes[0]);
-	free(countries);
-	free(purposes);
-	free(arr[0].name);
-	free(arr[0].country);
-	free(arr[0].purpose);
+	free_arr(countries, ccount);
+	free_arr(purposes, pcount);
+	free_struct(&arr[0]);
 	free(arr);
 	fclose(stream);
-}
-
-TEST(test_list_empty, list_tests) {
-	list(NULL, 0, NULL, 0, NULL, 0);
 }
 
 TEST(test_contains, contains_tests) {
@@ -226,12 +218,10 @@ TEST(test_contains, contains_tests) {
 	EXPECT_EQ(0, contains((char*)str, arr, 0));
 
 	arr = (char**)malloc(sizeof(char*));
-	if (!arr)
-		exit(-1);
+	ASSERT_NE((char**)NULL, arr);
 
 	arr[0] = (char*)malloc(sizeof("test str"));
-	if (!arr[0])
-		exit(-1);
+	ASSERT_NE((char*)NULL, arr[0]);
 
 	strcpy(arr[0], str);
 
@@ -239,4 +229,8 @@ TEST(test_contains, contains_tests) {
 
 	free(arr[0]);
 	free(arr);
+}
+
+TEST(test_add_str, add_str_tests) {
+	EXPECT_EQ(ERR_NULL, add_str(NULL, NULL, NULL));
 }
