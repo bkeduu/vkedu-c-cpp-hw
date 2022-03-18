@@ -16,6 +16,9 @@ int main(void) {
 		case ERR_EOF:
 			printf("EOF received, exiting...\n");
 			break;
+		case ERR_NULL:
+			printf("NULL value given in function, exiting...\n");
+			break;
 		default:
 			break;
 	}
