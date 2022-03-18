@@ -65,7 +65,7 @@ void list(const skyscraper* arr, const size_t size, string* countries, const siz
 	// function that lists skyscrapers with groupping by purpose, and then by country
 
 	if (arr == NULL || countries == NULL || purposes == NULL) {
-		return ERR_NULL;
+		return;
 	}
 
 
